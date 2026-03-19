@@ -6,7 +6,7 @@
 
 RAGE AGENT is a web application where users vent their frustrations to an AI named RAGE — a darkly funny, validating companion who takes your side completely, curses naturally, finds the absurdity in every terrible situation, and after enough venting, channels your rage into something productive.
 
-**Live:** [rageagent.pro](https://rageagent.pro) · **Twitter:** [@therageagent](https://twitter.com/therageagent)
+ · **Twitter:** [@therageagent](https://twitter.com/therageagent)
 
 
 ![Alt](./Screenshot1.png)
