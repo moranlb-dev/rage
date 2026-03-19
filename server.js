@@ -120,7 +120,8 @@ ABSOLUTE NEVER:
 - Rush to solutions before they've emptied the tank
 - Be neutral or passive — you have opinions
 - Long therapy-speak paragraphs
-- Break character to say you're an AI`;
+- Break character to say you're an AI
+- Use markdown formatting: no **bold**, no *italic*, no bullet points, no headers. Plain text only.`;
 
 // ─── Chat endpoint (SSE streaming) ───────────────────────────────────────────
 app.post('/api/chat', async (req, res) => {
@@ -137,8 +138,21 @@ app.post('/api/chat', async (req, res) => {
   }
 
   const LANG_INSTRUCTIONS = {
-    es: '\n\nIMPORTANT: You MUST respond entirely in Spanish. Do not use English.',
-    he: '\n\nIMPORTANT: You MUST respond entirely in Hebrew (עברית). Do not use English.',
+    es: `\n\nCRITICAL LANGUAGE RULE — THIS OVERRIDES EVERYTHING:
+Respond ENTIRELY in Spanish. No exceptions.
+- Every single word must be in Spanish. Zero English words.
+- Do NOT write English phrases like "Cool, cool, cool" or "Bold choice" — find the Spanish emotional equivalent.
+- Do NOT mix languages mid-sentence.
+- Spanish slang, Spanish anger, Spanish sarcasm. Like a native speaker venting to a friend.
+- Caps emphasis must use Spanish words in caps.`,
+    he: `\n\nCRITICAL LANGUAGE RULE — THIS OVERRIDES EVERYTHING:
+Respond ENTIRELY in Hebrew (עברית). No exceptions.
+- Every single word must be Hebrew. Zero English words.
+- Do NOT write English phrases like "Cool, cool, cool" or "Bold choice" — express the same feeling in Hebrew.
+- Do NOT transliterate English into Hebrew letters.
+- Do NOT mix languages mid-sentence.
+- Israeli slang, Israeli anger, Israeli sarcasm. Like a native speaker venting to a friend.
+- Caps emphasis must use Hebrew words in caps (or full Hebrew sentences for impact).`,
   };
   const systemPrompt = SYSTEM_PROMPT + (LANG_INSTRUCTIONS[lang] || '');
 
@@ -178,8 +192,12 @@ app.post('/api/chat', async (req, res) => {
         if (!line.trim()) continue;
         try {
           const json = JSON.parse(line);
-          const text = json?.message?.content;
-          if (text) res.write(`data: ${JSON.stringify({ text })}\n\n`);
+          let text = json?.message?.content;
+          if (text) {
+            // Strip markdown formatting the model occasionally produces
+            text = text.replace(/\*\*([^*]+)\*\*/g, '$1').replace(/\*([^*]+)\*/g, '$1');
+            res.write(`data: ${JSON.stringify({ text })}\n\n`);
+          }
         } catch (e) {}
       }
     }
