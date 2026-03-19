@@ -1254,6 +1254,108 @@
     html[dir="rtl"] .input-row {
       flex-direction: row-reverse;
     }
+
+    /* ── Age gate ────────────────────────────────────── */
+    #age-gate {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    #age-gate.open { display: flex; }
+
+    .age-gate-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+      animation: flicker 1.5s ease-in-out infinite;
+    }
+
+    .age-gate-title {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(22px, 5vw, 42px);
+      font-weight: 700;
+      color: var(--red);
+      letter-spacing: 6px;
+      text-shadow: 0 0 40px rgba(255,46,46,0.6);
+      margin-bottom: 14px;
+    }
+
+    .age-gate-subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      max-width: 400px;
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    .age-gate-warning {
+      font-size: 11px;
+      font-family: 'Space Mono', monospace;
+      letter-spacing: 2px;
+      color: var(--orange);
+      margin-bottom: 36px;
+      opacity: 0.8;
+    }
+
+    .age-gate-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .btn-age-yes {
+      padding: 15px 20px;
+      border: none;
+      border-radius: 12px;
+      background: var(--red);
+      color: white;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 0 30px rgba(255,46,46,0.3);
+    }
+
+    .btn-age-yes:hover {
+      background: #ff4444;
+      box-shadow: 0 0 50px rgba(255,46,46,0.5);
+      transform: translateY(-2px);
+    }
+
+    .btn-age-no {
+      padding: 11px 20px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: none;
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-age-no:hover { border-color: var(--muted); color: var(--text); }
+
+    .age-gate-footer {
+      margin-top: 28px;
+      font-size: 10px;
+      color: var(--muted);
+      opacity: 0.35;
+      font-family: 'Space Mono', monospace;
+      letter-spacing: 1px;
+    }
   </style>
 </head>
 <body>
@@ -1445,6 +1547,19 @@
 
 <!-- Toast -->
 <div id="toast"></div>
+
+<!-- Age Gate -->
+<div id="age-gate">
+  <div class="age-gate-icon">🔞</div>
+  <div class="age-gate-title">ADULTS ONLY</div>
+  <div class="age-gate-subtitle">This is a space for adults to vent, rage, and say what they actually mean. Expect strong language and zero sugarcoating.</div>
+  <div class="age-gate-warning">⚠ STRONG LANGUAGE · ADULT THEMES · 18+</div>
+  <div class="age-gate-actions">
+    <button class="btn-age-yes" onclick="App.confirmAge()">I'M 18 OR OLDER — ENTER</button>
+    <button class="btn-age-no" onclick="App.rejectAge()">I'M UNDER 18</button>
+  </div>
+  <div class="age-gate-footer">By entering you confirm you are at least 18 years of age</div>
+</div>
 
 <!-- Score info modal -->
 <div id="score-info-modal">
@@ -1828,6 +1943,9 @@ const App = {
     this.checkSpeechSupport();
     this.initAuth();
     this.initCarousel();
+    if (!localStorage.getItem('rage_age_ok')) {
+      document.getElementById('age-gate').classList.add('open');
+    }
     this.showWelcome();
   },
 
@@ -2488,6 +2606,19 @@ const App = {
     el.classList.add('show');
     clearTimeout(this._toastTimer);
     this._toastTimer = setTimeout(() => el.classList.remove('show'), duration);
+  },
+
+  // ── Age gate ───────────────────────────────────────
+  confirmAge() {
+    localStorage.setItem('rage_age_ok', '1');
+    const gate = document.getElementById('age-gate');
+    gate.style.transition = 'opacity 0.5s';
+    gate.style.opacity = '0';
+    setTimeout(() => gate.classList.remove('open'), 500);
+  },
+
+  rejectAge() {
+    window.location.href = 'https://www.google.com';
   },
 
   // ── Utils ──────────────────────────────────────────

@@ -13,7 +13,8 @@ RAGE AGENT is a web application where users vent their frustrations to an AI nam
 
 ## Features
 
-- **AI-powered venting** — Streaming responses from a local LLM (Ollama) with a custom sarcastic persona
+- **AI-powered venting** — Streaming responses from a local LLM (Ollama) with a custom sarcastic persona; Twitter-length responses (1–2 sentences max)
+- **Age verification** — 18+ gate on first visit, persisted in localStorage
 - **Voice input** — Shout directly into the mic via Web Speech API
 - **Text-to-speech** — RAGE talks back with a voice
 - **Rage scoring** — Every message earns points based on intensity, caps, punctuation, and profanity
@@ -22,7 +23,7 @@ RAGE AGENT is a web application where users vent their frustrations to an AI nam
 - **Twitter login** — Sign in with your Twitter account (OAuth 2.0)
 - **Tweet your rage** — Share RAGE's savage responses or your score to Twitter with `@therageagent` credited
 - **Quick-start topics** — Boss, relationship, family, internet, money, everything
-- **Multilingual** — English, Spanish, and Hebrew with full UI translation, RTL layout, and AI responses in the selected language
+- **Multilingual** — English, Spanish, and Hebrew with full UI translation, RTL layout, and AI responses in the selected language (language instruction injected at the top of the system prompt for best compliance)
 - **Quote carousel** — Rotating rants from ragers around the world
 - **Privacy-first** — No message monitoring, no curation, no liability
 - **ESC to close** — Keyboard-friendly: Escape closes any open modal
