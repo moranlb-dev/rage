@@ -21,6 +21,9 @@ RAGE AGENT is a web application where users vent their frustrations to an AI nam
 - **Twitter login** — Sign in with your Twitter account (OAuth 2.0)
 - **Tweet your rage** — Share RAGE's savage responses or your score to Twitter with `@therageagent` credited
 - **Quick-start topics** — Boss, relationship, family, internet, money, everything
+- **Multilingual** — English, Spanish, and Hebrew with full UI translation, RTL layout, and AI responses in the selected language
+- **Quote carousel** — Rotating rants from ragers around the world
+- **Privacy-first** — No message monitoring, no curation, no liability
 
 ---
 
@@ -34,7 +37,8 @@ RAGE AGENT is a web application where users vent their frustrations to an AI nam
 | Auth | bcryptjs password hashing + crypto random tokens |
 | Twitter | OAuth 2.0 via `twitter-api-v2` |
 | Frontend | Vanilla HTML/CSS/JS (single file) |
-| Fonts | Space Grotesk + Space Mono (Google Fonts) |
+| Fonts | Space Grotesk + Space Mono + Heebo (Google Fonts) |
+| i18n | Vanilla JS translation system with RTL support |
 | Storage | Flat JSON files (`users.json`, `leaderboard.json`) |
 
 ---
@@ -160,9 +164,12 @@ Tweets automatically mention `@therageagent`.
 {
   "messages": [
     { "role": "user", "content": "My boss is impossible" }
-  ]
+  ],
+  "lang": "en"
 }
 ```
+
+Supported `lang` values: `"en"` (default), `"es"` (Spanish), `"he"` (Hebrew). The AI will respond in the selected language.
 
 **Response:** `text/event-stream`
 ```
@@ -223,13 +230,25 @@ data: [DONE]
 
 ## Scoring System
 
-Rage score is calculated per message:
+Rage score is calculated per message using stackable multipliers:
 
 ```
-pts = (words × 3 + CAPS_WORDS × 15 + exclamations × 5 + questions × 3) × curseMult
+pts = (words×3 + CAPS_WORDS×15 + exclamations×5 + questions×3 + intensity_keywords×10)
+      × curseMult × topicMult × micMult
 ```
 
-Where `curseMult = 1.5` if the message contains profanity.
+| Multiplier | Condition | Value |
+|---|---|---|
+| `curseMult` | Message contains profanity | ×1.5 |
+| `topicMult` | Family / parents | +30% |
+| `topicMult` | Marriage / spouse | +25% |
+| `topicMult` | Dating / relationship | +20% |
+| `topicMult` | Money / debt / finances | +15% |
+| `topicMult` | Tiredness / exhaustion | +15% |
+| `topicMult` | Boss / manager / work | +10% |
+| `micMult` | Message sent via voice | ×1.2 |
+
+Topic multipliers stack — complain about your broke husband who exhausted you and watch those points fly. The `?` button next to RAGE SCORE in the UI shows the full breakdown.
 
 ### Rage Tiers
 
