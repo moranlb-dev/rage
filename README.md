@@ -24,6 +24,7 @@ RAGE AGENT is a web application where users vent their frustrations to an AI nam
 - **Multilingual** — English, Spanish, and Hebrew with full UI translation, RTL layout, and AI responses in the selected language
 - **Quote carousel** — Rotating rants from ragers around the world
 - **Privacy-first** — No message monitoring, no curation, no liability
+- **ESC to close** — Keyboard-friendly: Escape closes any open modal
 
 ---
 

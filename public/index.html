@@ -1273,7 +1273,7 @@
         <button class="lang-btn" id="lang-he" onclick="App.setLang('he')">HE</button>
       </div>
       <button id="auth-btn" onclick="App.showAuth()">LOG IN</button>
-      <button class="btn-icon" id="tts-btn" title="Toggle voice" onclick="App.toggleTTS()">🔊</button>
+      <button class="btn-icon" id="tts-btn" title="Toggle voice" onclick="App.toggleTTS()">🔇</button>
     </div>
   </header>
 
@@ -1305,7 +1305,7 @@
 
   <!-- Quote carousel -->
   <div id="quote-carousel">
-    <span class="quote-label">💬 RAGE OF THE DAY</span>
+    <span class="quote-label" data-i18n="rageOfDay">💬 RAGE OF THE DAY</span>
     <div class="quote-content" id="quote-content">
       <div class="quote-text" id="quote-text"></div>
       <div class="quote-author" id="quote-author"></div>
@@ -1339,7 +1339,7 @@
   <!-- Input -->
   <div id="input-area">
     <div class="input-row">
-      <button id="mic-btn" title="Hold to speak" onclick="App.toggleRecording()">🎤</button>
+      <button id="mic-btn" title="Click to speak" onclick="App.toggleRecording()">🎤</button>
       <textarea
         id="input"
         placeholder="Say it. All of it. No filter needed here."
@@ -1353,7 +1353,7 @@
 
   <!-- Footer -->
   <div id="app-footer">
-    <a onclick="App.showPrivacy()">Privacy & Terms</a> · rageagent.pro
+    <a onclick="App.showPrivacy()" data-i18n="privacyTerms">Privacy & Terms</a> · rageagent.pro
   </div>
 
 </div>
@@ -1389,7 +1389,7 @@
 
     <div style="display:flex;align-items:center;gap:10px;margin-top:16px">
       <div style="flex:1;height:1px;background:var(--border)"></div>
-      <span style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace">OR</span>
+      <span style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace" data-i18n="orDivider">OR</span>
       <div style="flex:1;height:1px;background:var(--border)"></div>
     </div>
 
@@ -1457,31 +1457,31 @@
 
     <div class="score-category">
       <div class="score-category-title" data-i18n="scoreBaseTitle">BASE POINTS (per message)</div>
-      <div class="score-item"><span>Each word</span><span class="score-item-pts">+3 pts</span></div>
-      <div class="score-item"><span>ALL CAPS word (3+ letters)</span><span class="score-item-pts">+15 pts</span></div>
-      <div class="score-item"><span>Exclamation mark !</span><span class="score-item-pts">+5 pts</span></div>
-      <div class="score-item"><span>Question mark ?</span><span class="score-item-pts">+3 pts</span></div>
-      <div class="score-item"><span>Profanity used</span><span class="score-item-pts">×1.5</span></div>
-      <div class="score-item"><span>Intensity words (hate, furious, livid…)</span><span class="score-item-pts">+10 pts each</span></div>
+      <div class="score-item"><span data-i18n="scoreItemWord">Each word</span><span class="score-item-pts">+3 pts</span></div>
+      <div class="score-item"><span data-i18n="scoreItemCaps">ALL CAPS word (3+ letters)</span><span class="score-item-pts">+15 pts</span></div>
+      <div class="score-item"><span data-i18n="scoreItemBang">Exclamation mark !</span><span class="score-item-pts">+5 pts</span></div>
+      <div class="score-item"><span data-i18n="scoreItemQuestion">Question mark ?</span><span class="score-item-pts">+3 pts</span></div>
+      <div class="score-item"><span data-i18n="scoreItemProfanity">Profanity used</span><span class="score-item-pts">×1.5</span></div>
+      <div class="score-item"><span data-i18n="scoreItemIntensity">Intensity words (hate, furious, livid…)</span><span class="score-item-pts">+10 pts each</span></div>
     </div>
 
     <div class="score-divider"></div>
 
     <div class="score-category">
       <div class="score-category-title" data-i18n="scoreTopicTitle">TOPIC MULTIPLIERS</div>
-      <div class="score-item"><span>👨‍👩‍👧 Family drama</span><span class="score-item-pts">+30%</span></div>
-      <div class="score-item"><span>💍 Marriage / divorce issues</span><span class="score-item-pts">+25%</span></div>
-      <div class="score-item"><span>💔 Dating / breakup</span><span class="score-item-pts">+20%</span></div>
-      <div class="score-item"><span>💸 Money / debt problems</span><span class="score-item-pts">+15%</span></div>
-      <div class="score-item"><span>😴 Exhaustion / can't sleep</span><span class="score-item-pts">+15%</span></div>
-      <div class="score-item"><span>👔 Boss / workplace</span><span class="score-item-pts">+10%</span></div>
+      <div class="score-item"><span data-i18n="scoreItemFamily">👨‍👩‍👧 Family drama</span><span class="score-item-pts">+30%</span></div>
+      <div class="score-item"><span data-i18n="scoreItemMarriage">💍 Marriage / divorce issues</span><span class="score-item-pts">+25%</span></div>
+      <div class="score-item"><span data-i18n="scoreItemDating">💔 Dating / breakup</span><span class="score-item-pts">+20%</span></div>
+      <div class="score-item"><span data-i18n="scoreItemMoney">💸 Money / debt problems</span><span class="score-item-pts">+15%</span></div>
+      <div class="score-item"><span data-i18n="scoreItemExhaustion">😴 Exhaustion / can't sleep</span><span class="score-item-pts">+15%</span></div>
+      <div class="score-item"><span data-i18n="scoreItemWork">👔 Boss / workplace</span><span class="score-item-pts">+10%</span></div>
     </div>
 
     <div class="score-divider"></div>
 
     <div class="score-category">
       <div class="score-category-title" data-i18n="scoreBonusTitle">BONUS BOOSTS</div>
-      <div class="score-item"><span>🎤 Used voice / mic</span><span class="score-item-pts">+20%</span></div>
+      <div class="score-item"><span data-i18n="scoreItemMic">🎤 Used voice / mic</span><span class="score-item-pts">+20%</span></div>
     </div>
 
     <div class="score-info-footer" data-i18n="scoreInfoFooter">
@@ -1587,6 +1587,23 @@ const TRANSLATIONS = {
     welcomeUser: (u) => `Welcome, ${u}. Let's get angry.`,
     voiceRecognitionLang: 'en-US',
     aiLangInstruction: '',
+    rageOfDay: '💬 RAGE OF THE DAY',
+    privacyTerms: 'Privacy & Terms',
+    orDivider: 'OR',
+    tweetThis: '𝕏 Tweet this',
+    scoreItemWord: 'Each word',
+    scoreItemCaps: 'ALL CAPS word (3+ letters)',
+    scoreItemBang: 'Exclamation mark !',
+    scoreItemQuestion: 'Question mark ?',
+    scoreItemProfanity: 'Profanity used',
+    scoreItemIntensity: 'Intensity words (hate, furious, livid…)',
+    scoreItemFamily: '👨‍👩‍👧 Family drama',
+    scoreItemMarriage: '💍 Marriage / divorce issues',
+    scoreItemDating: '💔 Dating / breakup',
+    scoreItemMoney: '💸 Money / debt problems',
+    scoreItemExhaustion: '😴 Exhaustion / can\'t sleep',
+    scoreItemWork: '👔 Boss / workplace',
+    scoreItemMic: '🎤 Used voice / mic',
   },
   es: {
     logIn: 'ENTRAR', logOut: 'SALIR',
@@ -1642,6 +1659,23 @@ const TRANSLATIONS = {
     welcomeUser: (u) => `Bienvenido, ${u}. Vamos a enfadarnos.`,
     voiceRecognitionLang: 'es-ES',
     aiLangInstruction: 'IMPORTANT: You MUST respond entirely in Spanish. Do not use English.',
+    rageOfDay: '💬 RABIA DEL DÍA',
+    privacyTerms: 'Privacidad y Términos',
+    orDivider: 'O',
+    tweetThis: '𝕏 Tuitear esto',
+    scoreItemWord: 'Cada palabra',
+    scoreItemCaps: 'Palabra en MAYÚSCULAS (3+ letras)',
+    scoreItemBang: 'Signo de exclamación !',
+    scoreItemQuestion: 'Signo de interrogación ?',
+    scoreItemProfanity: 'Palabrotas usadas',
+    scoreItemIntensity: 'Palabras de intensidad (odio, furioso…)',
+    scoreItemFamily: '👨‍👩‍👧 Drama familiar',
+    scoreItemMarriage: '💍 Matrimonio / divorcio',
+    scoreItemDating: '💔 Relación / ruptura',
+    scoreItemMoney: '💸 Dinero / deudas',
+    scoreItemExhaustion: '😴 Agotamiento / no puedo dormir',
+    scoreItemWork: '👔 Jefe / trabajo',
+    scoreItemMic: '🎤 Usaste el micrófono',
   },
   he: {
     logIn: 'כניסה', logOut: 'יציאה',
@@ -1697,6 +1731,23 @@ const TRANSLATIONS = {
     welcomeUser: (u) => `ברוך הבא, ${u}. בוא נכעס.`,
     voiceRecognitionLang: 'he-IL',
     aiLangInstruction: 'IMPORTANT: You MUST respond entirely in Hebrew. Do not use English.',
+    rageOfDay: '💬 זעם היום',
+    privacyTerms: 'פרטיות ותנאים',
+    orDivider: 'או',
+    tweetThis: '𝕏 צייץ את זה',
+    scoreItemWord: 'כל מילה',
+    scoreItemCaps: 'מילה באותיות גדולות (3+ אותיות)',
+    scoreItemBang: 'סימן קריאה !',
+    scoreItemQuestion: 'סימן שאלה ?',
+    scoreItemProfanity: 'שימוש בקללות',
+    scoreItemIntensity: 'מילות עוצמה (שנאה, עצבני, מטורף…)',
+    scoreItemFamily: '👨‍👩‍👧 דרמה משפחתית',
+    scoreItemMarriage: '💍 נישואים / גירושים',
+    scoreItemDating: '💔 זוגיות / פרידה',
+    scoreItemMoney: '💸 כסף / חובות',
+    scoreItemExhaustion: '😴 עייפות / לא יכול לישון',
+    scoreItemWork: '👔 בוס / עבודה',
+    scoreItemMic: '🎤 השתמשת במיקרופון',
   },
 };
 
@@ -2050,7 +2101,7 @@ const App = {
     if (container.querySelector('.tweet-btn')) return;
     const btn = document.createElement('button');
     btn.className = 'tweet-btn';
-    btn.innerHTML = '𝕏 Tweet this';
+    btn.textContent = this.t('tweetThis');
     btn.onclick = () => this.tweetResponse(bubble.textContent);
     container.appendChild(btn);
   },
@@ -2145,11 +2196,11 @@ const App = {
     utt.rate = 1.05;
     utt.pitch = 0.85;
     utt.volume = 1;
+    const langCode = this.t('voiceRecognitionLang'); // e.g. 'en-US', 'es-ES', 'he-IL'
+    utt.lang = langCode;
     const voices = window.speechSynthesis.getVoices();
-    const pick = voices.find(v =>
-      v.name.includes('Daniel') || v.name.includes('Alex') ||
-      v.name.includes('Google UK English Male') || (v.lang === 'en-US' && !v.name.includes('Female'))
-    );
+    const pick = voices.find(v => v.lang === langCode && !v.name.toLowerCase().includes('female'))
+      || voices.find(v => v.lang.startsWith(langCode.split('-')[0]));
     if (pick) utt.voice = pick;
     window.speechSynthesis.speak(utt);
   },
@@ -2479,6 +2530,16 @@ document.getElementById('auth-password').addEventListener('keydown', (e) => {
 });
 document.getElementById('auth-username').addEventListener('keydown', (e) => {
   if (e.key === 'Enter') document.getElementById('auth-password').focus();
+});
+
+// ESC key closes any open modal
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  if (document.getElementById('lb-modal').classList.contains('open')) App.closeLeaderboard();
+  else if (document.getElementById('submit-modal').classList.contains('open')) App.closeSubmit();
+  else if (document.getElementById('auth-modal').classList.contains('open')) App.closeAuth();
+  else if (document.getElementById('score-info-modal').classList.contains('open')) App.closeScoreInfo();
+  else if (document.getElementById('privacy-modal').classList.contains('open')) App.closePrivacy();
 });
 </script>
 </body>
