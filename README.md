@@ -8,7 +8,8 @@ RAGE AGENT is a web application where users vent their frustrations to an AI nam
 
 **Live:** [rageagent.pro](https://rageagent.pro) · **Twitter:** [@therageagent](https://twitter.com/therageagent)
 
----
+
+![Alt](./Screenshot1.png)
 
 ## Features
 
