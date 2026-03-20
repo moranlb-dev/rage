@@ -9,6 +9,7 @@
   <style>
     /* ── Reset & base ──────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    button { touch-action: manipulation; } /* remove 300ms tap delay on mobile */
 
     :root {
       --bg: #080808;
@@ -995,21 +996,22 @@
       color: var(--muted);
       cursor: pointer;
       font-size: 10px;
-      width: 16px;
-      height: 16px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       font-family: 'Space Mono', monospace;
-      opacity: 0.5;
-      transition: opacity 0.2s;
+      opacity: 0.6;
+      transition: all 0.2s;
       padding: 0;
       margin-left: 4px;
       vertical-align: middle;
+      touch-action: manipulation;
     }
 
-    .score-info-btn:hover { opacity: 1; border-color: var(--muted); }
+    .score-info-btn:hover { opacity: 1; border-color: var(--muted); color: var(--text); }
 
     #score-info-modal {
       display: none;
@@ -1356,6 +1358,9 @@
       font-family: 'Space Mono', monospace;
       letter-spacing: 1px;
     }
+
+    #age-gate { transition: opacity 0.5s ease; }
+    #age-gate.fading { opacity: 0; pointer-events: none; }
   </style>
 </head>
 <body>
@@ -2244,7 +2249,7 @@ const App = {
     RAGE_QUOTES.forEach((_, i) => {
       const dot = document.createElement('div');
       dot.className = 'quote-dot' + (i === 0 ? ' active' : '');
-      dot.onclick = () => this.showQuote(i);
+      dot.onclick = () => this.showQuote(i, true);
       nav.appendChild(dot);
     });
     this.showQuote(0);
@@ -2253,8 +2258,15 @@ const App = {
     }, 6000);
   },
 
-  showQuote(i) {
+  showQuote(i, manual = false) {
     this.quoteIndex = i;
+    // Reset auto-timer on manual navigation so it doesn't jump right away
+    if (manual && this.quoteTimer) {
+      clearInterval(this.quoteTimer);
+      this.quoteTimer = setInterval(() => {
+        this.showQuote((this.quoteIndex + 1) % RAGE_QUOTES.length);
+      }, 6000);
+    }
     const content = document.getElementById('quote-content');
     content.classList.add('fade');
     setTimeout(() => {
@@ -2612,9 +2624,8 @@ const App = {
   confirmAge() {
     localStorage.setItem('rage_age_ok', '1');
     const gate = document.getElementById('age-gate');
-    gate.style.transition = 'opacity 0.5s';
-    gate.style.opacity = '0';
-    setTimeout(() => gate.classList.remove('open'), 500);
+    gate.classList.add('fading');
+    setTimeout(() => { gate.classList.remove('open'); gate.classList.remove('fading'); }, 500);
   },
 
   rejectAge() {

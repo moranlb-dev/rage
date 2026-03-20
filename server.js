@@ -133,7 +133,7 @@ Como un amigo nativo que te escucha desahogarte.\n\n`,
         model: OLLAMA_MODEL,
         stream: true,
         options: {
-          num_predict: 80,   // hard token cap — enforces tweet-length replies
+          num_predict: lang === 'en' ? 80 : 120, // non-Latin scripts need more tokens for same word count
           temperature: 0.85,
         },
         messages: [
@@ -168,7 +168,10 @@ Como un amigo nativo que te escucha desahogarte.\n\n`,
           let text = json?.message?.content;
           if (text) {
             // Strip markdown formatting the model occasionally produces
-            text = text.replace(/\*\*([^*]+)\*\*/g, '$1').replace(/\*([^*]+)\*/g, '$1');
+            text = text
+              .replace(/\*\*([^*]+)\*\*/g, '$1')
+              .replace(/\*([^*]+)\*/g, '$1')
+              .replace(/^[\n\r]+/, ''); // strip leading newlines
             res.write(`data: ${JSON.stringify({ text })}\n\n`);
           }
         } catch (e) {}
