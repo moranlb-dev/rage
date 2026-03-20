@@ -1,7 +1,10 @@
+/*
+rage (rage agent) - created by githun.com/morandev
+*/
 {
   "name": "rage-agent",
   "version": "1.0.0",
-  "description": "RAGE AGENT — rageagent.pro — the sarcastic AI anger companion with a leaderboard",
+  "description": "RAGE AGENT — rageagent.lol — the sarcastic AI anger companion with a leaderboard",
   "type": "module",
   "scripts": {
     "start": "node --env-file=.env server.js",
