@@ -35,7 +35,7 @@ RAGE AGENT is a web application where users vent their frustrations to an AI nam
 | Layer | Technology |
 |---|---|
 | Backend | Node.js + Express (ES modules) |
-| AI | [Ollama](https://ollama.com) (local LLM, default: `llama3.2`) |
+| AI | [Ollama](https://ollama.com) (local LLM, default: `aya`) |
 | Streaming | Server-Sent Events (SSE) |
 | Auth | bcryptjs password hashing + crypto random tokens |
 | Twitter | OAuth 2.0 via `twitter-api-v2` |
@@ -71,13 +71,13 @@ npm install
 ### 3. Pull an Ollama model
 
 ```bash
-ollama pull llama3.2
+ollama pull aya
 ```
 
-Or for a lighter/faster model:
+Or for the larger, higher-quality variant:
 
 ```bash
-ollama pull llama3.2:1b
+ollama pull aya-expanse:32b
 ```
 
 ### 4. Configure environment
@@ -93,7 +93,7 @@ Edit `.env`:
 ```env
 # Required: Ollama settings
 OLLAMA_URL=http://localhost:11434
-OLLAMA_MODEL=llama3.2
+OLLAMA_MODEL=aya
 
 # Optional: Twitter OAuth (for "Log in with Twitter")
 TWITTER_CLIENT_ID=your_twitter_client_id
@@ -291,8 +291,8 @@ rage/
 
 ```env
 OLLAMA_URL=http://your-ollama-host:11434
-OLLAMA_MODEL=llama3.2
-APP_URL=https://rageagent.pro
+OLLAMA_MODEL=aya
+APP_URL=https://rageagent.lol
 TWITTER_CLIENT_ID=...
 TWITTER_CLIENT_SECRET=...
 PORT=3000

@@ -132,6 +132,10 @@ Como un amigo nativo que te escucha desahogarte.\n\n`,
       body: JSON.stringify({
         model: OLLAMA_MODEL,
         stream: true,
+        options: {
+          num_predict: 80,   // hard token cap — enforces tweet-length replies
+          temperature: 0.85,
+        },
         messages: [
           { role: 'system', content: systemPrompt },
           ...messages,
