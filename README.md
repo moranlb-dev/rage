@@ -287,6 +287,10 @@ rage/
 
 ## Deployment
 
+Live at: **[rageagent.lol](https://rageagent.lol)**
+
+Requires a server with **≥4GB RAM** to run Ollama + aya. Recommended: Hetzner CX22 (€5/mo) or Oracle Cloud Always Free (4 OCPUs, 24GB RAM).
+
 ### Environment variables to set in production
 
 ```env
@@ -298,12 +302,41 @@ TWITTER_CLIENT_SECRET=...
 PORT=3000
 ```
 
+### Quick deploy (VPS)
+
+```bash
+# 1. Clone & install
+git clone https://github.com/moranlb-dev/rage.git && cd rage && npm install
+
+# 2. Pull model
+ollama pull aya
+
+# 3. Start with PM2
+pm2 start server.js --name rage-agent && pm2 save
+
+# 4. nginx + SSL
+sudo certbot --nginx -d rageagent.lol -d www.rageagent.lol
+
+# 5. Future updates
+git pull && pm2 restart rage-agent
+```
+
+### Namecheap DNS (point rageagent.lol to your server)
+
+In Namecheap → Domain List → Manage → Advanced DNS:
+
+| Type | Host | Value |
+|---|---|---|
+| A Record | `@` | `YOUR_SERVER_IP` |
+| A Record | `www` | `YOUR_SERVER_IP` |
+
 ### Notes
 
 - `users.json` and `leaderboard.json` are created automatically on first run
-- For production, consider replacing flat-file storage with a database (SQLite, Postgres)
+- Token count is automatically adjusted per language: 80 tokens for English, 120 for Hebrew/Spanish (denser scripts)
 - Ollama must be accessible from the server — run it on the same host or expose it securely
 - Tokens are in-memory only — users will need to log in again after a server restart (by design for simplicity)
+- For production, consider replacing flat-file storage with a database (SQLite, Postgres)
 
 ---
 
