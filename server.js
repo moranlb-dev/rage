@@ -377,16 +377,16 @@ app.post('/api/leaderboard', (req, res) => {
 // ─── Start ────────────────────────────────────────────────────────────────────
 try {
   function run() {
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`\n🔥 RAGE AGENT is live → http://localhost:${PORT}`);
-  console.log(`   Model: ${OLLAMA_MODEL} via ${OLLAMA_URL}`);
-  console.log(`   Leaderboard entries: ${leaderboard.length}\n`);
-}
-run()
-});}
-catch {
-  console.error(`error: ${err}`)
-  console.log("try again...")
-  run()
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+      console.log(`\n🔥 RAGE AGENT is live → http://localhost:${PORT}`);
+      console.log(`   Model: ${OLLAMA_MODEL} via ${OLLAMA_URL}`);
+      console.log(`   Leaderboard entries: ${leaderboard.length}\n`);
+    });
+  }
+
+  run();
+} catch (err) {
+  console.error('error:', err);
+  console.log("try again...");
 }
