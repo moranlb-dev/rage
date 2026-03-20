@@ -10,7 +10,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
 
 const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434';
-const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'llama3.2';
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'aya';
 
 const TWITTER_CLIENT_ID = process.env.TWITTER_CLIENT_ID || '';
 const TWITTER_CLIENT_SECRET = process.env.TWITTER_CLIENT_SECRET || '';
