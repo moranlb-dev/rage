@@ -1,3 +1,7 @@
+/*
+rage (rage agent) - created by githun.com/morandev
+*/
+
 import express from 'express';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
