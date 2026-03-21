@@ -14,7 +14,7 @@
 
 | | |
 |---|---|
-| 🤖 **AI venting** | Streaming responses via [Groq](https://groq.com) (`llama-3.3-70b-versatile`) — Twitter-length, punch-and-leave style |
+| 🤖 **AI venting** | Streaming responses via [Groq](https://groq.com) (`llama-3.1-8b-instant`) — Twitter-length, punch-and-leave style |
 | 🌍 **Multilingual** | English, Spanish, Hebrew — full UI translation, RTL layout, native-language AI |
 | 🔥 **Live rage counter** | See how many people are actively raging right now |
 | 🏆 **Hall of Rage** | Global leaderboard — login required to view and submit |
@@ -36,7 +36,7 @@
 | Layer | Technology |
 |---|---|
 | Backend | Node.js + Express (ES modules) |
-| AI | [Groq API](https://groq.com) — `llama-3.3-70b-versatile` |
+| AI | [Groq API](https://groq.com) — `llama-3.1-8b-instant` |
 | Streaming | Server-Sent Events (SSE) |
 | Auth | bcryptjs + crypto random tokens |
 | Twitter | OAuth 2.0 via `twitter-api-v2` |
@@ -66,7 +66,7 @@ Create a `.env` file:
 GROQ_API_KEY=your_groq_api_key        # free at console.groq.com
 
 # Optional
-GROQ_MODEL=llama-3.3-70b-versatile    # default model
+GROQ_MODEL=llama-3.1-8b-instant    # default model
 DEPLOY_TOKEN=your_random_secret        # for webhook auto-deploy
 TWITTER_CLIENT_ID=...                  # for Twitter OAuth
 TWITTER_CLIENT_SECRET=...
