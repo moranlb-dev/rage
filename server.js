@@ -1,5 +1,6 @@
 /*
 rage (rage agent) - created by githun.com/morandev
+
 */
 
 import express from 'express';
@@ -275,12 +276,12 @@ app.get('/auth/twitter', async (req, res) => {
     const client = new TwitterApi({
       clientId: TWITTER_CLIENT_ID,
       clientSecret: TWITTER_CLIENT_SECRET,
-);
+  });
 
     const { url, codeVerifier, state } = client.generateOAuth2AuthLink(TWITTER_CALLBACK, {
       scope: ['tweet.read', 'users.read'],
-    };
-    );
+    });
+
 
     oauthStates.set(state, { codeVerifier, createdAt: Date.now() });
     // Clean up stale states (older than 10 min)
@@ -293,8 +294,7 @@ app.get('/auth/twitter', async (req, res) => {
     console.error('Twitter OAuth init error:', err.message);
     res.redirect('/?error=twitter_error');
   };
-};
-);
+});
 
 app.get('/auth/twitter/callback', async (req, res) => {
   const { state, code } = req.query;
@@ -310,16 +310,13 @@ app.get('/auth/twitter/callback', async (req, res) => {
     const client = new TwitterApi({
       clientId: TWITTER_CLIENT_ID,
       clientSecret: TWITTER_CLIENT_SECRET,
-    };
-    );
+    });
 
     const { client: authedClient } = await client.loginWithOAuth2({
       code,
       codeVerifier,
       redirectUri: TWITTER_CALLBACK,
-    };
-    );
-
+    });
     const { data: twitterUser } = await authedClient.v2.me();
     const twitterUsername = twitterUser.username;
     const displayName = `@${twitterUsername}`;
@@ -347,9 +344,7 @@ app.get('/auth/twitter/callback', async (req, res) => {
     console.error('Twitter OAuth callback error:', err.message);
     res.redirect('/?error=twitter_error');
   };
-};
-);
-
+});
 // ─── Leaderboard endpoints ────────────────────────────────────────────────────
 app.get('/api/leaderboard', (req, res) => {
   const sorted = [...leaderboard]
@@ -383,8 +378,7 @@ app.post('/api/leaderboard', (req, res) => {
 
   const rank = leaderboard.findIndex(e => e.id === entry.id) + 1;
   res.json({ ...entry, rank });
-}
-);
+});
 
 // ─── Start ────────────────────────────────────────────────────────────────────
 try {
@@ -394,12 +388,10 @@ try {
       console.log(`\n🔥 RAGE AGENT is live → http://localhost:${PORT}`);
       console.log(`   Model: ${OLLAMA_MODEL} via ${OLLAMA_URL}`);
       console.log(`   Leaderboard entries: ${leaderboard.length}\n`);
-    };
-    );
-  };
+    })}
 
   run();
 } catch (err) {
   console.error('error:', err);
-  console.log("try again...");
+  console.log("try again...")
 }
