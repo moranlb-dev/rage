@@ -1,32 +1,33 @@
 # 🔥 RAGE AGENT
 
-**The sarcastic AI anger companion that gets mad WITH you.**
-
 > *"Your anger is the correct response to this situation. I want that on record."*
 
-RAGE AGENT is a web application where users vent their frustrations to an AI named RAGE — a darkly funny, validating companion who takes your side completely, curses naturally, finds the absurdity in every terrible situation, and after enough venting, channels your rage into something productive.
+**RAGE AGENT** is an AI-powered venting companion. Talk to RAGE — a darkly funny, sarcastic AI who gets mad *with* you, takes your side completely, and ranks your fury against ragers worldwide.
 
- · **Twitter:** [@therageagent](https://twitter.com/therageagent)
+🌐 **[rageagent.lol](https://rageagent.lol)** · 🐦 **[@therageagent](https://twitter.com/therageagent)** · ⭐ **[Open Source](https://github.com/moranlb-dev/rage)**
 
+![RAGE AGENT screenshot](./Screenshot1.png)
 
-![Alt](./Screenshot1.png)
+---
 
 ## Features
 
-- **AI-powered venting** — Streaming responses from a local LLM (Ollama) with a custom sarcastic persona; Twitter-length responses (1–2 sentences max)
-- **Age verification** — 18+ gate on first visit, persisted in localStorage
-- **Voice input** — Shout directly into the mic via Web Speech API
-- **Text-to-speech** — RAGE talks back with a voice
-- **Rage scoring** — Every message earns points based on intensity, caps, punctuation, and profanity
-- **Hall of Rage** — Global leaderboard of the angriest sessions
-- **Anonymous auth** — Username + password only, no email required
-- **Twitter login** — Sign in with your Twitter account (OAuth 2.0)
-- **Tweet your rage** — Share RAGE's savage responses or your score to Twitter with `@therageagent` credited
-- **Quick-start topics** — Boss, relationship, family, internet, money, everything
-- **Multilingual** — English, Spanish, and Hebrew with full UI translation, RTL layout, and AI responses in the selected language (language instruction injected at the top of the system prompt for best compliance)
-- **Quote carousel** — Rotating rants from ragers around the world
-- **Privacy-first** — No message monitoring, no curation, no liability
-- **ESC to close** — Keyboard-friendly: Escape closes any open modal
+| | |
+|---|---|
+| 🤖 **AI venting** | Streaming responses via [Groq](https://groq.com) (`llama-3.3-70b-versatile`) — Twitter-length, punch-and-leave style |
+| 🌍 **Multilingual** | English, Spanish, Hebrew — full UI translation, RTL layout, native-language AI |
+| 🔥 **Live rage counter** | See how many people are actively raging right now |
+| 🏆 **Hall of Rage** | Global leaderboard — login required to view and submit |
+| 📊 **Rage scoring** | Points for CAPS, profanity, intensity words, topic, and voice input |
+| 🎤 **Voice input** | Shout into the mic via Web Speech API (+20% score multiplier) |
+| 🔊 **Text-to-speech** | RAGE talks back |
+| 🔄 **New session** | Reset chat, score, and rage meter in one click |
+| 🔐 **Anonymous auth** | Username + password only, no email required |
+| 🐦 **Twitter login** | OAuth 2.0 |
+| 📣 **Tweet your rage** | Share RAGE's best lines or your final score |
+| ⚡ **Quick-start topics** | Boss · Relationship · Family · Internet · Money · Everything |
+| 💬 **Quote carousel** | Rotating rants from ragers around the world |
+| 🚀 **Auto-deploy** | Push to `main` → live in seconds via webhook CI/CD |
 
 ---
 
@@ -35,223 +36,72 @@ RAGE AGENT is a web application where users vent their frustrations to an AI nam
 | Layer | Technology |
 |---|---|
 | Backend | Node.js + Express (ES modules) |
-| AI | [Ollama](https://ollama.com) (local LLM, default: `aya`) |
+| AI | [Groq API](https://groq.com) — `llama-3.3-70b-versatile` |
 | Streaming | Server-Sent Events (SSE) |
-| Auth | bcryptjs password hashing + crypto random tokens |
+| Auth | bcryptjs + crypto random tokens |
 | Twitter | OAuth 2.0 via `twitter-api-v2` |
 | Frontend | Vanilla HTML/CSS/JS (single file) |
-| Fonts | Space Grotesk + Space Mono + Heebo (Google Fonts) |
-| i18n | Vanilla JS translation system with RTL support |
+| Fonts | Space Grotesk · Space Mono · Heebo |
+| i18n | Vanilla JS with RTL support |
 | Storage | Flat JSON files (`users.json`, `leaderboard.json`) |
+| Process manager | PM2 |
+| Reverse proxy | nginx |
+| Hosting | Google Cloud e2-micro (free tier) |
+| CI/CD | GitHub Actions → webhook deploy |
 
 ---
 
-## Prerequisites
-
-- [Node.js](https://nodejs.org) v18+
-- [Ollama](https://ollama.com) running locally
-
----
-
-## Setup
-
-### 1. Clone the repo
+## Quick Start
 
 ```bash
 git clone https://github.com/moranlb-dev/rage.git
 cd rage
-```
-
-### 2. Install dependencies
-
-```bash
 npm install
 ```
 
-### 3. Pull an Ollama model
-
-```bash
-ollama pull aya
-```
-
-Or for the larger, higher-quality variant:
-
-```bash
-ollama pull aya-expanse:32b
-```
-
-### 4. Configure environment
-
-Copy the example env file:
-
-```bash
-cp .env.example .env
-```
-
-Edit `.env`:
+Create a `.env` file:
 
 ```env
-# Required: Ollama settings
-OLLAMA_URL=http://localhost:11434
-OLLAMA_MODEL=aya
+# Required
+GROQ_API_KEY=your_groq_api_key        # free at console.groq.com
 
-# Optional: Twitter OAuth (for "Log in with Twitter")
-TWITTER_CLIENT_ID=your_twitter_client_id
-TWITTER_CLIENT_SECRET=your_twitter_client_secret
-
-# Required for Twitter OAuth callback (set to your domain in production)
+# Optional
+GROQ_MODEL=llama-3.3-70b-versatile    # default model
+DEPLOY_TOKEN=your_random_secret        # for webhook auto-deploy
+TWITTER_CLIENT_ID=...                  # for Twitter OAuth
+TWITTER_CLIENT_SECRET=...
 APP_URL=http://localhost:3000
-
-# Optional: custom port
 PORT=3000
 ```
 
-### 5. Start Ollama
-
 ```bash
-ollama serve
-```
-
-### 6. Start the server
-
-```bash
-npm start
+npm run dev     # dev mode (auto-restart)
+npm start       # production mode
 ```
 
 Open [http://localhost:3000](http://localhost:3000) and start raging.
 
----
-
-## Development
-
-```bash
-npm run dev
-```
-
-Uses `--watch` for automatic restarts on file changes.
+Get a free Groq API key at [console.groq.com](https://console.groq.com).
 
 ---
 
-## Twitter Integration
-
-### Tweet sharing (works out of the box)
-
-No credentials needed. Users can:
-- **Tweet any RAGE response** — hover over a message → click `𝕏 Tweet this`
-- **Share their score** — after a session, click `𝕏 SHARE YOUR RAGE`
-
-Tweets automatically mention `@therageagent`.
-
-### Twitter login (requires setup)
-
-1. Go to [developer.twitter.com](https://developer.twitter.com) and create a Project + App
-2. Enable **OAuth 2.0** under User authentication settings
-3. Set **App type** to `Web App`
-4. Add callback URL:
-   - Development: `http://localhost:3000/auth/twitter/callback`
-   - Production: `https://yourdomain.com/auth/twitter/callback`
-5. Copy **Client ID** and **Client Secret** into `.env`
-
----
-
-## API Reference
-
-### Chat
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `POST` | `/api/chat` | Send a message, get SSE-streamed response |
-
-**Request body:**
-```json
-{
-  "messages": [
-    { "role": "user", "content": "My boss is impossible" }
-  ],
-  "lang": "en"
-}
-```
-
-Supported `lang` values: `"en"` (default), `"es"` (Spanish), `"he"` (Hebrew). The AI will respond in the selected language.
-
-**Response:** `text/event-stream`
-```
-data: {"text": "Oh "}
-data: {"text": "WOW. "}
-data: [DONE]
-```
-
----
-
-### Auth
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `POST` | `/api/register` | Create anonymous account |
-| `POST` | `/api/login` | Log in with username + password |
-| `GET` | `/api/me` | Get current user (requires Bearer token) |
-| `GET` | `/auth/twitter` | Initiate Twitter OAuth flow |
-| `GET` | `/auth/twitter/callback` | Twitter OAuth callback |
-
-**Register / Login request:**
-```json
-{
-  "username": "AngryMike",
-  "password": "letmein"
-}
-```
-
-**Register / Login response:**
-```json
-{
-  "token": "abc123...",
-  "username": "AngryMike"
-}
-```
-
-**Authentication:** Pass token as `Authorization: Bearer <token>` header.
-
----
-
-### Leaderboard
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/api/leaderboard` | Get top 20 scores |
-| `POST` | `/api/leaderboard` | Submit a score |
-
-**Submit score request:**
-```json
-{
-  "name": "AngryMike",
-  "score": 2847,
-  "tagline": "My coworker's passive aggression"
-}
-```
-
----
-
-## Scoring System
-
-Rage score is calculated per message using stackable multipliers:
+## Scoring
 
 ```
-pts = (words×3 + CAPS_WORDS×15 + exclamations×5 + questions×3 + intensity_keywords×10)
+pts = (words×3 + CAPS×15 + !×5 + ?×3 + intensity_words×10)
       × curseMult × topicMult × micMult
 ```
 
-| Multiplier | Condition | Value |
+| Multiplier | Trigger | Boost |
 |---|---|---|
-| `curseMult` | Message contains profanity | ×1.5 |
+| `curseMult` | Profanity | ×1.5 |
 | `topicMult` | Family / parents | +30% |
 | `topicMult` | Marriage / spouse | +25% |
 | `topicMult` | Dating / relationship | +20% |
-| `topicMult` | Money / debt / finances | +15% |
-| `topicMult` | Tiredness / exhaustion | +15% |
-| `topicMult` | Boss / manager / work | +10% |
-| `micMult` | Message sent via voice | ×1.2 |
-
-Topic multipliers stack — complain about your broke husband who exhausted you and watch those points fly. The `?` button next to RAGE SCORE in the UI shows the full breakdown.
+| `topicMult` | Money / debt | +15% |
+| `topicMult` | Exhaustion / sleep | +15% |
+| `topicMult` | Boss / work | +10% |
+| `micMult` | Voice input | ×1.2 |
 
 ### Rage Tiers
 
@@ -266,63 +116,137 @@ Topic multipliers stack — complain about your broke husband who exhausted you 
 
 ---
 
-## Project Structure
+## API
+
+### Chat
 
 ```
-rage/
-├── server.js          # Express server, API routes, OAuth
-├── public/
-│   └── index.html     # Full single-page frontend
-├── package.json
-├── .env.example
-├── .gitignore
-└── README.md
-
-# Runtime-generated (gitignored):
-├── users.json         # Registered users (bcrypt-hashed passwords)
-└── leaderboard.json   # Persisted leaderboard entries
+POST /api/chat
 ```
+
+```json
+{
+  "messages": [{ "role": "user", "content": "My boss is impossible" }],
+  "lang": "en",
+  "sessionId": "uuid"
+}
+```
+
+`lang`: `"en"` · `"es"` · `"he"` — context limited to last 10 messages.
+
+**Response:** `text/event-stream`
+```
+data: {"text": "Oh WOW. "}
+data: [DONE]
+```
+
+### Auth
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/register` | Create anonymous account |
+| `POST` | `/api/login` | Log in |
+| `GET` | `/api/me` | Get current user (Bearer token) |
+| `GET` | `/auth/twitter` | Start Twitter OAuth |
+| `GET` | `/auth/twitter/callback` | Twitter OAuth callback |
+
+### Leaderboard
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/leaderboard` | Top 20 scores |
+| `POST` | `/api/leaderboard` | Submit score (login required) |
+
+### Active users
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/active` | Sessions active in the last 5 min |
+
+### Deploy webhook
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/deploy` | Pull + restart (requires `x-deploy-token` header) |
 
 ---
 
 ## Deployment
 
-Live at: **[rageagent.lol](https://rageagent.lol)**
+### GitHub Actions (auto-deploy)
 
-Requires a server with **≥4GB RAM** to run Ollama + aya.
+Every push to `main` triggers the deploy workflow → calls `/deploy` on the server → `git pull` + `npm install` + `pm2 restart`.
 
-### Environment variables
+Required GitHub secret:
 
-```env
-OLLAMA_URL=http://localhost:11434
-OLLAMA_MODEL=aya
-APP_URL=https://rageagent.lol
-PORT=3000
+| Secret | Value |
+|---|---|
+| `DEPLOY_TOKEN` | Random string matching `DEPLOY_TOKEN` in server `.env` |
 
-# Optional: Twitter OAuth
-TWITTER_CLIENT_ID=...
-TWITTER_CLIENT_SECRET=...
-```
-
-### Production setup (VPS)
+### Server setup (Google Cloud / any Ubuntu VPS)
 
 ```bash
-# Install Node.js, Ollama, PM2, nginx, certbot — then:
+# Install Node.js 20
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs git nginx certbot python3-certbot-nginx
+sudo npm install -g pm2
+
+# Clone and start
 git clone https://github.com/moranlb-dev/rage.git && cd rage
 npm install
-ollama pull aya
-pm2 start server.js --name rage-agent && pm2 save
+echo "GROQ_API_KEY=..." > .env
+echo "DEPLOY_TOKEN=..." >> .env
+pm2 start server.js --name rage-agent && pm2 startup && pm2 save
+
+# SSL
+sudo certbot --nginx -d rageagent.lol -d www.rageagent.lol
 ```
 
-Deployments are automated via GitHub Actions — see [`.github/workflows/`](.github/workflows/).
+### nginx config
+
+```nginx
+server {
+    listen 80;
+    server_name rageagent.lol www.rageagent.lol;
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_buffering off;
+    }
+}
+```
 
 ### Notes
 
-- `users.json` and `leaderboard.json` are created automatically on first run
-- Token budget adjusts per language: 80 tokens for English, 120 for Hebrew/Spanish
-- Ollama must run on the same host as the server (or be exposed securely)
+- No GPU required — Groq handles inference in the cloud
+- `users.json` and `leaderboard.json` are auto-created on first run
 - Auth tokens are in-memory — users re-login after server restart (by design)
-- For high traffic, replace flat-file storage with SQLite or Postgres
+- For high traffic, swap flat-file storage for SQLite or Postgres
+
+---
+
+## Project Structure
+
+```
+rage/
+├── server.js              # Express server, Groq streaming, all API routes
+├── public/
+│   └── index.html         # Entire frontend (single file, no build step)
+├── .github/
+│   └── workflows/
+│       ├── deploy-production.yml
+│       └── deploy-staging.yml
+├── package.json
+├── .env.example
+└── README.md
+
+# Runtime-generated (gitignored):
+├── users.json             # Registered users (bcrypt-hashed passwords)
+└── leaderboard.json       # Persisted leaderboard entries
+```
 
 ---
 
@@ -332,9 +256,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow.
 
 **Short version:**
 1. Fork → branch off `staging`
-2. Open a PR against `staging`
-3. Maintainer reviews + merges → auto-deploys to staging
-4. Maintainer promotes `staging` → `main` → auto-deploys to production
+2. PR against `staging`
+3. Maintainer reviews → merges → auto-deploys to staging
+4. Maintainer promotes `staging` → `main` → live on rageagent.lol
 
 ---
 
