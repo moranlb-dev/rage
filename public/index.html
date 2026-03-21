@@ -2446,7 +2446,17 @@ const App = {
           if (data === '[DONE]') break;
           try {
             const { text, error } = JSON.parse(data);
-            if (error) throw new Error(error);
+            if (error) {
+              document.getElementById('typing-indicator').style.display = 'none';
+              const msg = (error.includes('rate_limit') || error.includes('429'))
+                ? "🔥 Too many ragers at once — RAGE needs a breather. Try again in a minute."
+                : this.t('streamError');
+              bubble.textContent = msg;
+              bubble.style.color = 'var(--muted)';
+              this.isStreaming = false;
+              document.getElementById('send-btn').disabled = false;
+              return;
+            }
             if (text) {
               full += text;
               bubble.textContent = full;
