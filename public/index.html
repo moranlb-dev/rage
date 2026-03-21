@@ -95,6 +95,10 @@
       color: var(--muted);
       letter-spacing: 1px;
     }
+    .active-counter #active-count {
+      color: #44ff88;
+      font-weight: 700;
+    }
 
     .active-dot {
       width: 7px;
@@ -111,20 +115,41 @@
     }
 
     .mode-badge {
-      font-size: 11px;
+      font-size: 10px;
       font-family: 'Space Mono', monospace;
       letter-spacing: 2px;
       padding: 4px 10px;
       border-radius: 20px;
-      border: 1px solid var(--orange);
-      color: var(--orange);
-      transition: all 0.3s;
+      border: 1px solid transparent;
+      transition: all 0.4s;
+      white-space: nowrap;
     }
-
-    .mode-badge.hot {
-      border-color: var(--red);
+    /* State 1 — Warming Up: barely visible, doesn't compete */
+    .mode-badge.s1 {
+      color: rgba(255,204,0,0.4);
+      border-color: rgba(255,204,0,0.12);
+    }
+    /* State 2 — Getting Heated: orange, starting to show */
+    .mode-badge.s2 {
+      color: var(--orange);
+      border-color: rgba(255,107,26,0.5);
+    }
+    /* State 3 — Fully Raging: red, glowing */
+    .mode-badge.s3 {
+      color: #ff6a00;
+      border-color: rgba(255,68,0,0.7);
+      box-shadow: 0 0 10px rgba(255,68,0,0.25);
+    }
+    /* State 4 — Maximum Rage: full fire, pulsing */
+    .mode-badge.s4 {
       color: var(--red);
-      box-shadow: 0 0 10px rgba(255,46,46,0.3);
+      border-color: var(--red);
+      box-shadow: 0 0 14px rgba(255,46,46,0.4);
+      animation: rage-badge-pulse 1.4s ease-in-out infinite;
+    }
+    @keyframes rage-badge-pulse {
+      0%, 100% { box-shadow: 0 0 10px rgba(255,46,46,0.3); }
+      50% { box-shadow: 0 0 22px rgba(255,46,46,0.6); }
     }
 
     .btn-icon {
@@ -139,6 +164,23 @@
     }
 
     .btn-icon:hover { border-color: var(--red); color: var(--text); }
+
+    /* Group the 3 utility icon buttons */
+    .icon-group {
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      overflow: hidden;
+    }
+    .icon-group .btn-icon {
+      border: none;
+      border-radius: 0;
+      border-right: 1px solid var(--border);
+      padding: 6px 9px;
+    }
+    .icon-group .btn-icon:last-child { border-right: none; }
+    .icon-group .btn-icon:hover { background: rgba(255,46,46,0.07); }
 
     .github-link {
       display: inline-flex;
@@ -339,18 +381,19 @@
     }
 
     .rage-track {
-      height: 6px;
+      height: 8px;
       background: var(--border);
-      border-radius: 3px;
+      border-radius: 4px;
       overflow: hidden;
     }
 
     #rage-bar {
       height: 100%;
       width: 0%;
-      border-radius: 3px;
+      border-radius: 4px;
       background: var(--yellow);
       transition: width 0.5s ease, background 0.5s ease;
+      box-shadow: 0 0 8px currentColor;
     }
 
     #leaderboard-btn {
@@ -438,6 +481,7 @@
     .rex .bubble {
       background: var(--rex-bg);
       border: 1px solid var(--rex-border);
+      border-left: 3px solid var(--red);
       border-top-left-radius: 4px;
       color: var(--text);
     }
@@ -489,9 +533,12 @@
       padding: 10px 20px 0;
       display: flex;
       gap: 8px;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       flex-shrink: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
     }
+    #quick-starts::-webkit-scrollbar { display: none; }
 
     .quick-btn {
       font-size: 12px;
@@ -504,12 +551,14 @@
       cursor: pointer;
       transition: all 0.2s;
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .quick-btn:hover {
       border-color: var(--red);
       color: var(--text);
       background: rgba(255,46,46,0.08);
+      transform: translateY(-1px);
     }
 
     /* ── Input area ────────────────────────────────── */
@@ -545,7 +594,8 @@
     #input::placeholder { color: var(--muted); }
 
     #input:focus {
-      border-color: #333;
+      border-color: rgba(255,46,46,0.45);
+      box-shadow: 0 0 0 3px rgba(255,46,46,0.07);
     }
 
     #mic-btn {
@@ -1094,7 +1144,11 @@
     @media (max-width: 600px) {
       .rage-meter { display: none; }
       .score-info { gap: 12px; }
-      .logo { font-size: 18px; letter-spacing: 4px; }
+      .logo { font-size: 15px; letter-spacing: 3px; }
+      .github-link { display: none; }
+      .active-counter span:not(#active-count) { display: none; }
+      header { padding: 10px 14px; }
+      .header-right { gap: 6px; }
     }
 
     /* ── Quote carousel ────────────────────────────── */
@@ -1548,16 +1602,18 @@
     </div>
     <div class="header-right">
       <div class="active-counter"><div class="active-dot"></div><span id="active-count">1</span> RAGING</div>
-      <span id="mode-badge" class="mode-badge">WARMING UP</span>
+      <span id="mode-badge" class="mode-badge s1">WARMING UP</span>
       <div class="lang-switcher">
         <button class="lang-btn active" id="lang-en" onclick="App.setLang('en')">EN</button>
         <button class="lang-btn" id="lang-es" onclick="App.setLang('es')">ES</button>
         <button class="lang-btn" id="lang-he" onclick="App.setLang('he')">HE</button>
       </div>
       <button id="auth-btn" onclick="App.showAuth()">LOG IN</button>
-      <button class="btn-icon" id="tts-btn" title="Toggle voice" onclick="App.toggleTTS()">🔇</button>
-      <button class="btn-icon" title="New session" onclick="App.newSession()">🔄</button>
-      <button class="btn-icon" title="Community Rants" onclick="App.showCommunityRants()">📣</button>
+      <div class="icon-group">
+        <button class="btn-icon" id="tts-btn" title="Toggle voice" onclick="App.toggleTTS()">🔇</button>
+        <button class="btn-icon" title="Community Rants" onclick="App.showCommunityRants()">📣</button>
+        <button class="btn-icon" title="New session" onclick="App.newSession()">🔄</button>
+      </div>
       <a href="https://github.com/moranlb-dev/rage" target="_blank" rel="noopener" class="github-link">⭐ Open Source</a>
     </div>
   </header>
@@ -2364,19 +2420,19 @@ const App = {
     if (this.rageLevel < 25) {
       bar.style.background = '#ffcc00';
       badge.textContent = this.t('warmingUp');
-      badge.className = 'mode-badge';
+      badge.className = 'mode-badge s1';
     } else if (this.rageLevel < 50) {
       bar.style.background = '#ff8800';
       badge.textContent = this.t('gettingHeated');
-      badge.className = 'mode-badge';
+      badge.className = 'mode-badge s2';
     } else if (this.rageLevel < 75) {
       bar.style.background = '#ff4400';
       badge.textContent = this.t('fullyRaging');
-      badge.className = 'mode-badge hot';
+      badge.className = 'mode-badge s3';
     } else {
       bar.style.background = '#ff0000';
       badge.textContent = this.t('maximumRage');
-      badge.className = 'mode-badge hot';
+      badge.className = 'mode-badge s4';
     }
   },
 
@@ -2954,7 +3010,7 @@ const App = {
     document.getElementById('rage-pct').textContent = '0%';
     const badge = document.getElementById('mode-badge');
     badge.textContent = this.t('warmingUp');
-    badge.className = 'mode-badge';
+    badge.className = 'mode-badge s1';
     const chat = document.getElementById('chat-area');
     const typing = document.getElementById('typing-indicator');
     while (chat.firstChild && chat.firstChild !== typing) {
