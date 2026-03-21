@@ -3,9 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>RAGE AGENT — rageagent.lol</title>
+  <meta name="description" content="The sarcastic AI anger companion that gets mad WITH you. Vent. Score. Rank your rage against the world." />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://rageagent.lol" />
+  <meta property="og:title" content="RAGE AGENT — The AI that gets mad WITH you" />
+  <meta property="og:description" content="Vent to an AI that takes your side completely. Curse freely. Score your fury. Compete on the Hall of Rage." />
+  <meta property="og:image" content="https://rageagent.lol/og-image.png" />
+  <meta property="og:image:width" content="961" />
+  <meta property="og:image:height" content="684" />
+  <meta property="og:site_name" content="RAGE AGENT" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@therageagent" />
+  <meta name="twitter:title" content="RAGE AGENT — The AI that gets mad WITH you" />
+  <meta name="twitter:description" content="Vent to an AI that takes your side completely. Curse freely. Score your fury. Compete on the Hall of Rage." />
+  <meta name="twitter:image" content="https://rageagent.lol/og-image.png" />
+
+  <!-- PWA -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <title>RAGE AGENT — rageagent.lol</title>
+  <meta name="apple-mobile-web-app-title" content="RAGE" />
+  <meta name="theme-color" content="#080808" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
@@ -3126,6 +3152,11 @@ const App = {
 };
 
 window.addEventListener('DOMContentLoaded', () => App.init());
+
+// Register service worker for PWA
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
 
 // Close modals on backdrop click
 document.getElementById('lb-modal').addEventListener('click', (e) => {
