@@ -2364,6 +2364,11 @@ const App = {
 
   // ── Leaderboard ────────────────────────────────────
   async showLeaderboard() {
+    if (!this.authUser) {
+      this.showAuth();
+      this.toast('Log in to see the Hall of Rage 🏆');
+      return;
+    }
     document.getElementById('lb-modal').classList.add('open');
     const list = document.getElementById('lb-list');
     list.innerHTML = `<div class="lb-empty">${this.t('lbLoading')}</div>`;
@@ -2404,6 +2409,11 @@ const App = {
   // ── Submit score ───────────────────────────────────
   offerSubmit() {
     if (this.score < 50) return;
+    if (!this.authUser) {
+      this.showAuth();
+      this.toast('Log in to submit your score 🔥');
+      return;
+    }
     const tier = this.getTier(this.score);
     document.getElementById('final-score-display').textContent = this.score.toLocaleString();
     document.getElementById('tier-display').textContent = `${tier.emoji} ${tier.label}`;
