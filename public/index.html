@@ -140,6 +140,29 @@
 
     .btn-icon:hover { border-color: var(--red); color: var(--text); }
 
+    .github-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 12px;
+      border: 1px solid var(--orange);
+      border-radius: 6px;
+      background: rgba(255,107,26,0.08);
+      color: var(--orange);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .github-link:hover {
+      background: rgba(255,107,26,0.2);
+      color: #fff;
+      border-color: #fff;
+    }
+
     /* ── Score banner ──────────────────────────────── */
     #score-banner {
       display: flex;
@@ -1408,6 +1431,7 @@
       <button id="auth-btn" onclick="App.showAuth()">LOG IN</button>
       <button class="btn-icon" id="tts-btn" title="Toggle voice" onclick="App.toggleTTS()">🔇</button>
       <button class="btn-icon" title="New session" onclick="App.newSession()">🔄</button>
+      <a href="https://github.com/moranlb-dev/rage" target="_blank" rel="noopener" class="github-link">⭐ Open Source</a>
     </div>
   </header>
 
@@ -1487,7 +1511,7 @@
 
   <!-- Footer -->
   <div id="app-footer">
-    <a onclick="App.showPrivacy()" data-i18n="privacyTerms">Privacy & Terms</a> · rageagent.lol · <a href="https://github.com/moranlb-dev/rage" target="_blank" rel="noopener">⭐ Open Source — Contribute on GitHub</a>
+    <a onclick="App.showPrivacy()" data-i18n="privacyTerms">Privacy & Terms</a> · rageagent.lol
   </div>
 
 </div>
