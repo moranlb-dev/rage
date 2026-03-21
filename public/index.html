@@ -1381,6 +1381,7 @@
       </div>
       <button id="auth-btn" onclick="App.showAuth()">LOG IN</button>
       <button class="btn-icon" id="tts-btn" title="Toggle voice" onclick="App.toggleTTS()">🔇</button>
+      <button class="btn-icon" title="New session" onclick="App.newSession()">🔄</button>
     </div>
   </header>
 
@@ -2592,10 +2593,9 @@ const App = {
 
   // ── Twitter sharing ────────────────────────────────
   tweetResponse(text) {
-    const MAX = 220;
-    const handle = '@therageagent';
+    const MAX = 200;
     const truncated = text.length > MAX ? text.slice(0, MAX - 1) + '…' : text;
-    const tweet = `"${truncated}"\n\n— ${handle} 🔥`;
+    const tweet = `"${truncated}"\n\n— @therageagent 🔥\nrageagent.lol`;
     window.open(
       `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweet)}`,
       '_blank', 'width=600,height=400,noopener'
@@ -2630,6 +2630,28 @@ const App = {
 
   rejectAge() {
     window.location.href = 'https://www.google.com';
+  },
+
+  // ── New session ─────────────────────────────────────
+  newSession() {
+    this.messages = [];
+    this.score = 0;
+    this.rageLevel = 0;
+    this.msgCount = 0;
+    document.getElementById('score-display').textContent = '0';
+    document.getElementById('msg-count').textContent = '0';
+    document.getElementById('rage-bar').style.width = '0%';
+    document.getElementById('rage-pct').textContent = '0%';
+    const badge = document.getElementById('mode-badge');
+    badge.textContent = this.t('warmingUp');
+    badge.className = 'mode-badge';
+    const chat = document.getElementById('chat-area');
+    const typing = document.getElementById('typing-indicator');
+    while (chat.firstChild && chat.firstChild !== typing) {
+      chat.removeChild(chat.firstChild);
+    }
+    this.showWelcome();
+    this.toast('New session started 🔥');
   },
 
   // ── Utils ──────────────────────────────────────────

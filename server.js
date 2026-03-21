@@ -142,6 +142,8 @@ Como un amigo nativo que te escucha desahogarte.\n\n`,
   const systemPrompt = langPrefix + SYSTEM_PROMPT;
 
   try {
+    const recentMessages = messages.slice(-10);
+
     const stream = await groq.chat.completions.create({
       model: GROQ_MODEL,
       stream: true,
@@ -149,7 +151,7 @@ Como un amigo nativo que te escucha desahogarte.\n\n`,
       max_tokens: lang === 'en' ? 80 : 120,
       messages: [
         { role: 'system', content: systemPrompt },
-        ...messages,
+        ...recentMessages,
       ],
     });
 
@@ -357,7 +359,8 @@ app.post('/deploy', (req, res) => {
     return res.status(403).json({ error: 'Forbidden' });
   }
   res.json({ success: true, message: 'Deploy started' });
-  exec('cd ~/rage && git pull origin main && npm install --omit=dev && pm2 restart rage-agent', (err, stdout, stderr) => {
+  const home = process.env.HOME || '/home/bar_moran';
+  exec(`cd ${home}/rage && git pull origin main && npm install --omit=dev && pm2 restart rage-agent`, { shell: '/bin/bash' }, (err, stdout, stderr) => {
     if (err) console.error('Deploy error:', stderr);
     else console.log('Deploy complete:', stdout);
   });
