@@ -522,6 +522,84 @@ app.post('/api/verdict', async (req, res) => {
   }
 });
 
+// ─── Twitter Bot ──────────────────────────────────────────────────────────────
+const TWITTER_APP_KEY    = process.env.TWITTER_APP_KEY    || '';
+const TWITTER_APP_SECRET = process.env.TWITTER_APP_SECRET || '';
+const TWITTER_ACCESS_TOKEN  = process.env.TWITTER_ACCESS_TOKEN  || '';
+const TWITTER_ACCESS_SECRET = process.env.TWITTER_ACCESS_SECRET || '';
+
+function getTwitterBotClient() {
+  if (!TWITTER_APP_KEY || !TWITTER_APP_SECRET || !TWITTER_ACCESS_TOKEN || !TWITTER_ACCESS_SECRET) return null;
+  return new TwitterApi({
+    appKey: TWITTER_APP_KEY,
+    appSecret: TWITTER_APP_SECRET,
+    accessToken: TWITTER_ACCESS_TOKEN,
+    accessSecret: TWITTER_ACCESS_SECRET,
+  });
+}
+
+async function generateTweetText(prompt) {
+  const res = await groq.chat.completions.create({
+    model: GROQ_MODEL,
+    temperature: 0.95,
+    max_tokens: 90,
+    messages: [{ role: 'user', content: prompt }],
+  });
+  return (res.choices[0]?.message?.content || '').trim();
+}
+
+async function postDailyTopicTweet() {
+  const client = getTwitterBotClient();
+  if (!client) return;
+  const { topic } = getCurrentTopic();
+  const prompt = `You are RAGE (@therageagent), a darkly funny AI anger companion. This week's community rage topic is: "${topic}"\n\nWrite ONE tweet (max 220 chars) that:\n- Calls people to come vent about this\n- Is angry, punchy, darkly funny\n- Ends with "→ rageagent.lol 🔥"\n- No hashtags, no quotes around the text\nJust the tweet text, nothing else.`;
+  const text = await generateTweetText(prompt);
+  if (text) {
+    await client.v2.tweet(text.slice(0, 280));
+    console.log('🐦 Daily topic tweet:', text);
+  }
+}
+
+async function postGeoRantTweet() {
+  const client = getTwitterBotClient();
+  if (!client) return;
+  const prompt = `You are RAGE (@therageagent), a darkly funny anger companion. Write a tweet about a universal frustration that people everywhere relate to.\n\nPick from themes like: cost of living, housing prices, bureaucracy going nowhere, broken promises by institutions, wealth inequality, waiting forever for things that should be simple, systems that grind ordinary people down.\n\nStrict rules:\n- Max 220 chars\n- Darkly funny, punchy, universally relatable\n- NEVER name specific politicians, political parties, countries, religions, or ethnic groups\n- No divisive politics — speak to shared human frustration only\n- Ends with "— @therageagent"\nJust the tweet text, nothing else.`;
+  const text = await generateTweetText(prompt);
+  if (text) {
+    await client.v2.tweet(text.slice(0, 280));
+    console.log('🌍 Geo rant tweet:', text);
+  }
+}
+
+// Runs every minute; daily tweet at 10:00 UTC, geo rant every 5h
+let lastDailyTweetDate = '';
+let lastGeoTweetTime = 0;
+
+function startTweetScheduler() {
+  if (!TWITTER_APP_KEY) {
+    console.log('   Twitter bot: disabled (set TWITTER_APP_KEY to enable)');
+    return;
+  }
+  console.log('   Twitter bot: enabled 🐦');
+  setInterval(async () => {
+    const now = new Date();
+    const utcHour = now.getUTCHours();
+    const todayStr = now.toISOString().slice(0, 10);
+
+    // Daily topic tweet at 10:00 UTC
+    if (utcHour === 10 && lastDailyTweetDate !== todayStr) {
+      lastDailyTweetDate = todayStr;
+      postDailyTopicTweet().catch(e => console.error('Daily tweet error:', e.message));
+    }
+
+    // Geo rant every 5 hours
+    if (Date.now() - lastGeoTweetTime >= 5 * 60 * 60 * 1000) {
+      lastGeoTweetTime = Date.now();
+      postGeoRantTweet().catch(e => console.error('Geo tweet error:', e.message));
+    }
+  }, 60 * 1000);
+}
+
 // ─── Deploy webhook ───────────────────────────────────────────────────────────
 app.post('/deploy', (req, res) => {
   const token = req.headers['x-deploy-token'];
@@ -541,5 +619,7 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`\n🔥 RAGE AGENT is live → http://localhost:${PORT}`);
   console.log(`   Model: ${GROQ_MODEL} via Groq`);
-  console.log(`   Leaderboard entries: ${leaderboard.length}\n`);
+  console.log(`   Leaderboard entries: ${leaderboard.length}`);
+  startTweetScheduler();
+  console.log('');
 });
