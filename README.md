@@ -177,32 +177,6 @@ Required GitHub secret:
 |---|---|
 | `DEPLOY_TOKEN` | Random string matching `DEPLOY_TOKEN` in server `.env` |
 
-### Server setup (Google Cloud / any Ubuntu VPS)
-
-```bash
-# Install Node.js 20
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt install -y nodejs git nginx certbot python3-certbot-nginx
-sudo npm install -g pm2
-
-# Clone and start
-git clone https://github.com/moranlb-dev/rage.git && cd rage
-npm install
-echo "GROQ_API_KEY=..." > .env
-echo "DEPLOY_TOKEN=..." >> .env
-pm2 start server.js --name rage-agent && pm2 startup && pm2 save
-
-# SSL
-sudo certbot --nginx -d rageagent.lol -d www.rageagent.lol
-```
-
-### Notes
-
-- No GPU required — Groq handles inference in the cloud
-- `users.json` and `leaderboard.json` are auto-created on first run
-- Auth tokens are in-memory — users re-login after server restart (by design)
-- For high traffic, swap flat-file storage for SQLite or Postgres
-
 ---
 
 ## Project Structure
