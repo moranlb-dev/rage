@@ -8,22 +8,10 @@ jobs:
   deploy:
     name: Deploy → rageagent.lol
     runs-on: ubuntu-latest
-    environment: production
 
     steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          envs: GROQ_API_KEY
-          script: |
-            cd ~/rage
-            git pull origin main
-            npm install --omit=dev
-            echo "GROQ_API_KEY=$GROQ_API_KEY" > ~/rage/.env
-            pm2 restart rage-agent --update-env
-            echo "✅ Production deploy complete"
-        env:
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      - name: Trigger deploy webhook
+        run: |
+          curl -sf -X POST https://rageagent.lol/deploy \
+            -H "x-deploy-token: ${{ secrets.DEPLOY_TOKEN }}" \
+            && echo "✅ Production deploy triggered"

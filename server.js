@@ -9,6 +9,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import fs from 'fs';
 import crypto from 'crypto';
+import { exec } from 'child_process';
 import bcrypt from 'bcryptjs';
 import { TwitterApi } from 'twitter-api-v2';
 import Groq from 'groq-sdk';
@@ -349,18 +350,23 @@ app.post('/api/leaderboard', (req, res) => {
   res.json({ ...entry, rank });
 });
 
-// ─── Start ────────────────────────────────────────────────────────────────────
-try {
-  function run() {
-    const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => {
-      console.log(`\n🔥 RAGE AGENT is live → http://localhost:${PORT}`);
-      console.log(`   Model: ${OLLAMA_MODEL} via ${OLLAMA_URL}`);
-      console.log(`   Leaderboard entries: ${leaderboard.length}\n`);
-    })}
+// ─── Deploy webhook ───────────────────────────────────────────────────────────
+app.post('/deploy', (req, res) => {
+  const token = req.headers['x-deploy-token'];
+  if (!token || token !== process.env.DEPLOY_TOKEN) {
+    return res.status(403).json({ error: 'Forbidden' });
+  }
+  res.json({ success: true, message: 'Deploy started' });
+  exec('cd ~/rage && git pull origin main && npm install --omit=dev && pm2 restart rage-agent', (err, stdout, stderr) => {
+    if (err) console.error('Deploy error:', stderr);
+    else console.log('Deploy complete:', stdout);
+  });
+});
 
-  run();
-} catch (err) {
-  console.error('error:', err);
-  console.log("try again...")
-}
+// ─── Start ────────────────────────────────────────────────────────────────────
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`\n🔥 RAGE AGENT is live → http://localhost:${PORT}`);
+  console.log(`   Model: ${GROQ_MODEL} via Groq`);
+  console.log(`   Leaderboard entries: ${leaderboard.length}\n`);
+});
