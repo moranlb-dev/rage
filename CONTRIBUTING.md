@@ -58,7 +58,15 @@ When staging looks good, the maintainer merges `staging` → `main`, which trigg
 git clone https://github.com/moranlb-dev/rage.git
 cd rage
 npm install
-ollama pull aya     # requires Ollama installed locally
+```
+
+Create a `.env` file:
+
+```env
+GROQ_API_KEY=your_groq_api_key   # free at console.groq.com
+```
+
+```bash
 npm run dev
 ```
 
@@ -97,8 +105,6 @@ GitHub → Settings → Secrets → Actions:
 
 | Secret | Description |
 |---|---|
-| `DEPLOY_HOST` | Server IP or hostname |
-| `DEPLOY_USER` | SSH username on server |
-| `DEPLOY_SSH_KEY` | Private SSH key (server must have public key in `~/.ssh/authorized_keys`) |
+| `DEPLOY_TOKEN` | Random secret matching `DEPLOY_TOKEN` in server `.env` |
 
-These are set per environment (`staging` and `production`) in GitHub → Settings → Environments.
+Deploys are triggered via webhook (`POST /deploy`) — no SSH keys needed.
