@@ -224,7 +224,7 @@ Como un amigo nativo que te escucha desahogarte.\n\n`,
   const systemPrompt = langPrefix + SYSTEM_PROMPT + contextBlock;
 
   try {
-    const recentMessages = messages.slice(-10);
+    const recentMessages = messages.slice(-6);
 
     const stream = await groq.chat.completions.create({
       model: GROQ_MODEL,
