@@ -2568,8 +2568,9 @@ const App = {
       const dec = new TextDecoder();
       let buf = '';
       let full = '';
+      let streamDone = false;
 
-      while (true) {
+      while (!streamDone) {
         const { done, value } = await reader.read();
         if (done) break;
 
@@ -2580,7 +2581,7 @@ const App = {
         for (const line of lines) {
           if (!line.startsWith('data: ')) continue;
           const data = line.slice(6).trim();
-          if (data === '[DONE]') break;
+          if (data === '[DONE]') { streamDone = true; break; }
           try {
             const { text, error } = JSON.parse(data);
             if (error) {
